@@ -28,6 +28,8 @@ class TweetsController < ApplicationController
   end
 
   def show
+    @comment = Comment.new # tweets/show.html.erbでform_withを使用して、comments#createを実行するリクエストを飛ばしたいので、@comment = Comment.newというインスタンス変数を生成
+    @comments = @tweet.comments.includes(:user)  # tweetsテーブルとcommentsテーブルはアソシエーションが組まれているので、@tweet.commentsとすることで、@tweetへ投稿されたすべてのコメントを取得できる。またincludesメソッドを使って、N+1問題を解決している点にも注意
   end
 
   private
