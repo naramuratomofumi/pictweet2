@@ -1,5 +1,6 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: [:edit, :show]
+  before_action :move_to_index, except: [:index, :show] #indexアクションにアクセスした場合、indexアクションへのリダイレクトを繰り返してしまい、無限ループが起こります。この対策として、except: :indexを付け加えています。
 
   def index
     @tweets = Tweet.all
@@ -37,5 +38,11 @@ class TweetsController < ApplicationController
   
   def set_tweet
     @tweet = Tweet.find(params[:id])
+  end
+
+  def move_to_index
+    unless user_signed_in?         ##unlessでuser_signed_in?を判定して、その返り値がfalseだった場合にredirect_toが実行されます。すなわち、ユーザーがログインしていない場合にはindexアクションが実行されます。
+      redirect_to action: :index
+    end
   end
 end
