@@ -4,4 +4,5 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :tweets #userは複数の投稿を所有する
+  has_many :comments  # commentsテーブルとのアソシエーション
 end
