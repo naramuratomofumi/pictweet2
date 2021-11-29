@@ -7,17 +7,19 @@
           <li>
             <%= link_to '詳細', tweet_path(tweet.id), method: :get %>
           </li>
-          <li>
-            <%= link_to '編集', edit_tweet_path(tweet.id), method: :get %>
-          </li>
-          <li>
-            <%= link_to '削除', tweet_path(tweet.id), method: :delete %>
-          </li>
+          <% if user_signed_in? && current_user.id == tweet.user_id %> <%#current_user.id == tweet.user_idと記述することで、「現在ログインしているユーザー」と「ツイートを投稿したユーザー」が同じか否かを判定することができます。%>
+            <li>
+              <%= link_to '編集', edit_tweet_path(tweet.id), method: :get %>
+            </li>
+            <li>
+              <%= link_to '削除', tweet_path(tweet.id), method: :delete %>
+            </li>
+          <% end %>
         </ul>
       </div>
       <p><%= tweet.text %></p>
       <span class="name">
-        <a href="">
+        <a href="/users/<%= tweet.user.id %>">
           <span>投稿者</span><%= tweet.user.nickname %>
         </a>
       </span>
