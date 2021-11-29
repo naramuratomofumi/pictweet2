@@ -1,6 +1,6 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: [:edit, :show]
-  before_action :move_to_index, except: [:index, :show] #indexアクションにアクセスした場合、indexアクションへのリダイレクトを繰り返してしまい、無限ループが起こります。この対策として、except: :indexを付け加えています。
+  before_action :move_to_index, except: [:index, :show, :search] #indexアクションにアクセスした場合、indexアクションへのリダイレクトを繰り返してしまい、無限ループが起こります。この対策として、except: :indexを付け加えています。
 
   def index
     @tweets = Tweet.includes(:user).order("created_at DESC")
@@ -30,6 +30,10 @@ class TweetsController < ApplicationController
   def show
     @comment = Comment.new # tweets/show.html.erbでform_withを使用して、comments#createを実行するリクエストを飛ばしたいので、@comment = Comment.newというインスタンス変数を生成
     @comments = @tweet.comments.includes(:user)  # tweetsテーブルとcommentsテーブルはアソシエーションが組まれているので、@tweet.commentsとすることで、@tweetへ投稿されたすべてのコメントを取得できる。またincludesメソッドを使って、N+1問題を解決している点にも注意
+  end
+
+  def search
+    @tweets = Tweet.search(params[:keyword])  # searchメソッドの引数にparams[:keyword]と記述して、検索結果を渡しています。
   end
 
   private
