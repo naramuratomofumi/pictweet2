@@ -1,6 +1,7 @@
 class CommentsController < ApplicationController
   def create
-    Comment.create(comment_params)
+    comment = Comment.create(comment_params)   # tweetsコントローラーのshowアクションを実行するには、ツイートのidが必要。そのため、ストロングパラメーターを用いた上で変数commentに代入
+    redirect_to "/tweets/#{comment.tweet.id}"  # コメントと結びつくツイートの詳細画面に遷移する
   end
 
   private
